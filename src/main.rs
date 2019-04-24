@@ -5,14 +5,15 @@ use std::collections::HashMap;
 use git2::Repository;
 
 
-static DEFAULT_CONFIG_FILE_PATH: &str = ".Meiling";
+static DEFAULT_CONFIG_FILE_PATH: &str = ".Meiling.toml";
+static DEFAULT_REPOSITORY_PATH: &str = "repositories/fixed/";
 
 
 fn main() {
     let repository_url = get_repository_url();
     println!("{:?}", repository_url);
 
-    let repo = match Repository::clone(&repository_url, "repositories/fixed/") {
+    let repo = match Repository::clone(&repository_url, &DEFAULT_REPOSITORY_PATH) {
         Ok(repo) => repo,
         Err(e) => panic!("failed to clone: {}", e),
     };
