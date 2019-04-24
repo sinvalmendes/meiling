@@ -2,16 +2,23 @@
 extern crate config;
 
 use std::collections::HashMap;
+use git2::Repository;
+
 
 static DEFAULT_CONFIG_FILE_PATH: &str = ".Meiling";
 
 
 fn main() {
-    let repository_address = get_repository_address();
-    println!("{:?}", repository_address);
+    let repository_url = get_repository_url();
+    println!("{:?}", repository_url);
+
+    let repo = match Repository::clone(&repository_url, "repositories/fixed/") {
+        Ok(repo) => repo,
+        Err(e) => panic!("failed to clone: {}", e),
+    };
 }
 
-fn get_repository_address() -> std::string::String {
+fn get_repository_url() -> std::string::String {
     let settings = get_settings();
 
     match settings.get("repository") {

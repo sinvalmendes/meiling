@@ -1,8 +1,8 @@
 # Mei Ling
 
-CLI tool to store ideas/notes (you can use Markdown) in a Git repo.
+CLI tool to store ideas/notes (you can use Markdown) on a Git repo.
 
-You need to setup a Git repo (Bitbucket or GitHub) and setup in the config file.
+You need to setup a Git repo (e.g. GitHub) and pass the address on the config file.
 
 # Capabilities
   - 0.0.1 - reads a config file and print out the content - DONE
