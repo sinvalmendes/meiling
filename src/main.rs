@@ -7,8 +7,17 @@ static DEFAULT_CONFIG_FILE_PATH: &str = ".Meiling";
 
 
 fn main() {
+    let repository_address = get_repository_address();
+    println!("{:?}", repository_address);
+}
+
+fn get_repository_address() -> std::string::String {
     let settings = get_settings();
-    println!("{:?}", settings);
+
+    match settings.get("repository") {
+        Some(x) => format!("{}", x),
+        None    => format!("{}", ""),
+    }
 }
 
 fn get_settings() -> HashMap<String, String> {
