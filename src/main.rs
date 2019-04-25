@@ -13,10 +13,18 @@ fn main() {
     let repository_url = get_repository_url();
     println!("{:?}", repository_url);
 
-    let repo = match Repository::clone(&repository_url, &DEFAULT_REPOSITORY_PATH) {
+    let repo = match Repository::open(&DEFAULT_REPOSITORY_PATH) {
         Ok(repo) => repo,
-        Err(e) => panic!("failed to clone: {}", e),
+        Err(e) => {
+            let cloned_repo = match Repository::clone(&repository_url, &DEFAULT_REPOSITORY_PATH) {
+                Ok(repo) => repo,
+                Err(e) => panic!("failed to clone: {}", e),
+            };
+            cloned_repo
+        },
     };
+
+    println!("{:?} was opened", repository_url);
 }
 
 fn get_repository_url() -> std::string::String {
