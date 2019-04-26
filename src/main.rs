@@ -1,9 +1,10 @@
 #![feature(try_from)]
 extern crate config;
+extern crate clap;
 
 use std::collections::HashMap;
 use git2::Repository;
-
+use clap::{Arg, App, SubCommand};
 
 static DEFAULT_CONFIG_FILE_PATH: &str = ".Meiling.toml";
 static DEFAULT_REPOSITORY_PATH: &str = "repositories/fixed/";
@@ -25,6 +26,21 @@ fn main() {
     };
 
     println!("{:?} was opened", repository_url);
+    let matches = App::new("meiling")
+                          .version("0.0.1")
+                          .author("Sinval Vieira <sinvalneto01@gmail.com>")
+                          .about("Note manager")
+                          .arg(Arg::with_name("create")
+                               .short("c")
+                               .long("create")
+                               .value_name("NOTE_NAME")
+                               .help("Create a note")
+                               .takes_value(true))
+                          .get_matches();
+
+    let note_name = matches.value_of("create").unwrap();
+    println!("Note: {}", note_name);
+
 }
 
 fn get_repository_url() -> std::string::String {
