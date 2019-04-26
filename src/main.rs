@@ -3,6 +3,8 @@ extern crate config;
 extern crate clap;
 
 use std::collections::HashMap;
+use std::io;
+use std::process::Command;
 use git2::Repository;
 use clap::{Arg, App, SubCommand};
 
@@ -41,6 +43,15 @@ fn main() {
     let note_name = matches.value_of("create").unwrap();
     println!("Note: {}", note_name);
 
+    let vim = "/usr/bin/vim";
+    let note_file_path = format!("repositories/fixed/{}", note_name);
+    match Command::new(vim).arg(&note_file_path).status() {
+        Ok(_) => Ok(()),
+        Err(e) => {
+            eprintln!("Error: Unable to open file [{}] with vim [{}]: {}", vim, &note_file_path, e);
+            Err(e)
+        }
+    };
 }
 
 fn get_repository_url() -> std::string::String {
