@@ -44,7 +44,7 @@ fn main() {
     println!("Note: {}", note_name);
 
     let vim = "/usr/bin/vim";
-    let note_file_path = format!("repositories/fixed/{}", note_name);
+    let note_file_path = format!("{}{}", &DEFAULT_REPOSITORY_PATH, note_name);
     match Command::new(vim).arg(&note_file_path).status() {
         Ok(_) => Ok(()),
         Err(e) => {

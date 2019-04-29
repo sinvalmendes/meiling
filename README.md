@@ -1,6 +1,6 @@
 # Mei Ling
 
-CLI tool to store ideas/notes (you can use Markdown) on a Git repo.
+CLI tool to store ideas asnotes (Markdown) that uses a Git repository as storage backend.
 
 You need to setup a Git repo (e.g. GitHub) and pass the address on the config file.
 
@@ -14,6 +14,7 @@ You need to setup a Git repo (e.g. GitHub) and pass the address on the config fi
   - 0.0.7 - reads a config file key for git repo and makes a git push with local content
   - 0.0.8 - reads a config file key for git repo, creates a blank file and push it
   - 0.0.9 - reads a config file key for git repo and show error message if it does not exists
+
 # Run
 ```sh
 $ cargo run
