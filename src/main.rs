@@ -38,20 +38,32 @@ fn main() {
                                .value_name("NOTE_NAME")
                                .help("Create a note")
                                .takes_value(true))
+                          .subcommand(SubCommand::with_name("push")
+                                .about("push current state"))
                           .get_matches();
 
-    let note_name = matches.value_of("create").unwrap();
-    println!("Note: {}", note_name);
+    let create = matches.value_of("create").unwrap_or("no_value");
 
-    let vim = "/usr/bin/vim";
-    let note_file_path = format!("{}{}", &DEFAULT_REPOSITORY_PATH, note_name);
-    match Command::new(vim).arg(&note_file_path).status() {
-        Ok(_) => Ok(()),
-        Err(e) => {
-            eprintln!("Error: Unable to open file [{}] with vim [{}]: {}", vim, &note_file_path, e);
-            Err(e)
-        }
-    };
+    if create != "no_value" {
+        println!("Creating...");
+
+        let note_name = matches.value_of("create").unwrap();
+        println!("Note: {}", note_name);
+
+        let vim = "/usr/bin/vim";
+        let note_file_path = format!("{}{}", &DEFAULT_REPOSITORY_PATH, note_name);
+        match Command::new(vim).arg(&note_file_path).status() {
+            Ok(_) => Ok(()),
+            Err(e) => {
+                eprintln!("Error: Unable to open file [{}] with vim [{}]: {}", vim, &note_file_path, e);
+                Err(e)
+            }
+        };
+    }
+
+    if let Some(matches) = matches.subcommand_matches("push") {
+        println!("Pushing...");
+    }
 }
 
 fn get_repository_url() -> std::string::String {
