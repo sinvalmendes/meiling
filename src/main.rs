@@ -40,10 +40,13 @@ fn main() {
                                .takes_value(true))
                           .subcommand(SubCommand::with_name("push")
                                 .about("push current state"))
+                          .subcommand(SubCommand::with_name("status")
+                                .about("get current state"))
+                          .subcommand(SubCommand::with_name("pull")
+                                .about("pull from repository"))
                           .get_matches();
 
     let create = matches.value_of("create").unwrap_or("no_value");
-
     if create != "no_value" {
         println!("Creating...");
 
@@ -63,6 +66,14 @@ fn main() {
 
     if let Some(matches) = matches.subcommand_matches("push") {
         println!("Pushing...");
+    }
+
+    if let Some(matches) = matches.subcommand_matches("status") {
+        println!("Status:");
+    }
+
+    if let Some(matches) = matches.subcommand_matches("pull") {
+        println!("Pulling...");
     }
 }
 
