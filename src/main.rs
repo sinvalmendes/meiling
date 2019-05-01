@@ -70,6 +70,11 @@ fn main() {
 
     if let Some(matches) = matches.subcommand_matches("status") {
         println!("Status:");
+        let output = Command::new("git")
+            .args(&["status", &DEFAULT_REPOSITORY_PATH])
+            .output()
+            .expect("failed to execute process");
+        println!("{:?}", String::from_utf8_lossy(&output.stdout))
     }
 
     if let Some(matches) = matches.subcommand_matches("pull") {
