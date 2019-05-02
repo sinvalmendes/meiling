@@ -2,9 +2,11 @@
 extern crate config;
 extern crate clap;
 
+use shellfn::shell;
+use std::error::Error;
+
 use std::collections::HashMap;
 use std::io;
-use std::io::{Write};
 use std::process::Command;
 use git2::Repository;
 use clap::{Arg, App, SubCommand};
@@ -66,7 +68,7 @@ fn main() {
     }
 
     if let Some(matches) = matches.subcommand_matches("push") {
-        println!("Pushing...");
+        git_add_and_push(&DEFAULT_REPOSITORY_PATH);
     }
 
     if let Some(matches) = matches.subcommand_matches("status") {
@@ -77,6 +79,14 @@ fn main() {
         println!("Pulling...");
     }
 }
+
+#[shell]
+fn git_add_and_push(dir: &str) -> Result<impl Iterator<Item=String>, Box<Error>> { r#"
+    cd $DIR
+    git add -A
+    git commit -m 'Commit message'
+    git push
+"# }
 
 fn git_status() {
     let output = Command::new("git").args(&["status", &DEFAULT_REPOSITORY_PATH])
