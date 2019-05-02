@@ -4,6 +4,7 @@ extern crate clap;
 
 use std::collections::HashMap;
 use std::io;
+use std::io::{Write};
 use std::process::Command;
 use git2::Repository;
 use clap::{Arg, App, SubCommand};
@@ -69,16 +70,22 @@ fn main() {
     }
 
     if let Some(matches) = matches.subcommand_matches("status") {
-        println!("Status:");
-        let output = Command::new("git")
-            .args(&["status", &DEFAULT_REPOSITORY_PATH])
-            .output()
-            .expect("failed to execute process");
-        println!("{:?}", String::from_utf8_lossy(&output.stdout))
+        git_status();
     }
 
     if let Some(matches) = matches.subcommand_matches("pull") {
         println!("Pulling...");
+    }
+}
+
+fn git_status() {
+    let output = Command::new("git").args(&["status", &DEFAULT_REPOSITORY_PATH])
+        .output().expect("failed to execute process");
+
+    let string = String::from_utf8_lossy(&output.stdout);
+    let vec: Vec<&str> = string.split("\n").collect();
+    for line in vec {
+        println!("{}", line);
     }
 }
 
