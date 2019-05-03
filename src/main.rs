@@ -89,7 +89,9 @@ fn git_add_and_push(dir: &str) -> Result<impl Iterator<Item=String>, Box<Error>>
 "# }
 
 fn git_status() {
-    let output = Command::new("git").args(&["status", &DEFAULT_REPOSITORY_PATH])
+    let git_dir = format!("{}.git", &DEFAULT_REPOSITORY_PATH);
+    let output = Command::new("git")
+        .args(&["--git-dir", &git_dir, "--work-tree", &DEFAULT_REPOSITORY_PATH, "status"])
         .output().expect("failed to execute process");
 
     let string = String::from_utf8_lossy(&output.stdout);
