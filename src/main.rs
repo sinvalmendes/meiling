@@ -51,8 +51,6 @@ fn main() {
 
     let create = matches.value_of("create").unwrap_or("no_value");
     if create != "no_value" {
-        println!("Creating...");
-
         let note_name = matches.value_of("create").unwrap();
         println!("Note: {}", note_name);
 
@@ -76,9 +74,15 @@ fn main() {
     }
 
     if let Some(matches) = matches.subcommand_matches("pull") {
-        println!("Pulling...");
+        git_pull(&DEFAULT_REPOSITORY_PATH);
     }
 }
+
+#[shell]
+fn git_pull(dir: &str) -> Result<impl Iterator<Item=String>, Box<Error>> { r#"
+    cd $DIR
+    git pull
+"# }
 
 #[shell]
 fn git_add_and_push(dir: &str) -> Result<impl Iterator<Item=String>, Box<Error>> { r#"
