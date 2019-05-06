@@ -6,7 +6,6 @@ use shellfn::shell;
 use std::error::Error;
 
 use std::collections::HashMap;
-use std::io;
 use std::process::Command;
 use git2::Repository;
 use clap::{Arg, App, SubCommand};
@@ -64,8 +63,8 @@ fn git_add_and_push(dir: &str) -> Result<impl Iterator<Item=String>, Box<Error>>
 "# }
 
 
-fn get_repository(repository_url: &str) {
-    let repo = match Repository::open(&DEFAULT_REPOSITORY_PATH) {
+fn get_repository(repository_url: &str) -> git2::Repository {
+    return match Repository::open(&DEFAULT_REPOSITORY_PATH) {
         Ok(repo) => repo,
         Err(e) => {
             let cloned_repo = match Repository::clone(&repository_url, &DEFAULT_REPOSITORY_PATH) {
@@ -75,7 +74,6 @@ fn get_repository(repository_url: &str) {
             cloned_repo
         },
     };
-    repo;
 }
 
 fn git_status() {
