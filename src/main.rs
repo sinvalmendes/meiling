@@ -17,37 +17,8 @@ static DEFAULT_REPOSITORY_PATH: &str = "repositories/fixed/";
 
 fn main() {
     let repository_url = get_repository_url();
-    println!("{:?}", repository_url);
-
-    let repo = match Repository::open(&DEFAULT_REPOSITORY_PATH) {
-        Ok(repo) => repo,
-        Err(e) => {
-            let cloned_repo = match Repository::clone(&repository_url, &DEFAULT_REPOSITORY_PATH) {
-                Ok(repo) => repo,
-                Err(e) => panic!("failed to clone: {}", e),
-            };
-            cloned_repo
-        },
-    };
-
-    println!("{:?} was opened", repository_url);
-    let matches = App::new("meiling")
-                          .version("0.0.1")
-                          .author("Sinval Vieira <sinvalneto01@gmail.com>")
-                          .about("Note manager")
-                          .arg(Arg::with_name("create")
-                               .short("c")
-                               .long("create")
-                               .value_name("NOTE_NAME")
-                               .help("Create a note")
-                               .takes_value(true))
-                          .subcommand(SubCommand::with_name("push")
-                                .about("push current state"))
-                          .subcommand(SubCommand::with_name("status")
-                                .about("get current state"))
-                          .subcommand(SubCommand::with_name("pull")
-                                .about("pull from repository"))
-                          .get_matches();
+    get_repository(&repository_url);
+    let matches = get_matches();
 
     let create = matches.value_of("create").unwrap_or("no_value");
     if create != "no_value" {
@@ -92,6 +63,21 @@ fn git_add_and_push(dir: &str) -> Result<impl Iterator<Item=String>, Box<Error>>
     git push
 "# }
 
+
+fn get_repository(repository_url: &str) {
+    let repo = match Repository::open(&DEFAULT_REPOSITORY_PATH) {
+        Ok(repo) => repo,
+        Err(e) => {
+            let cloned_repo = match Repository::clone(&repository_url, &DEFAULT_REPOSITORY_PATH) {
+                Ok(repo) => repo,
+                Err(e) => panic!("failed to clone: {}", e),
+            };
+            cloned_repo
+        },
+    };
+    repo;
+}
+
 fn git_status() {
     let git_dir = format!("{}.git", &DEFAULT_REPOSITORY_PATH);
     let output = Command::new("git")
@@ -121,4 +107,24 @@ fn get_settings() -> HashMap<String, String> {
         .merge(config::Environment::with_prefix("APP")).unwrap();
 
     settings.try_into::<HashMap<String, String>>().unwrap()
+}
+
+fn get_matches() -> clap::ArgMatches<'static>{
+    return App::new("meiling")
+                .version("0.0.1")
+                .author("Sinval Vieira <sinvalneto01@gmail.com>")
+                .about("Note manager")
+                .arg(Arg::with_name("create")
+                    .short("c")
+                    .long("create")
+                    .value_name("NOTE_NAME")
+                    .help("Create a note")
+                    .takes_value(true))
+                .subcommand(SubCommand::with_name("push")
+                    .about("push current state"))
+                .subcommand(SubCommand::with_name("status")
+                    .about("get current state"))
+                .subcommand(SubCommand::with_name("pull")
+                    .about("pull from repository"))
+                .get_matches();
 }
