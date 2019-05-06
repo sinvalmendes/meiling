@@ -35,15 +35,15 @@ fn main() {
         };
     }
 
-    if let Some(matches) = matches.subcommand_matches("push") {
+    if let Some(_) = matches.subcommand_matches("push") {
         git_add_and_push(&DEFAULT_REPOSITORY_PATH);
     }
 
-    if let Some(matches) = matches.subcommand_matches("status") {
+    if let Some(_) = matches.subcommand_matches("status") {
         git_status();
     }
 
-    if let Some(matches) = matches.subcommand_matches("pull") {
+    if let Some(_) = matches.subcommand_matches("pull") {
         git_pull(&DEFAULT_REPOSITORY_PATH);
     }
 }
