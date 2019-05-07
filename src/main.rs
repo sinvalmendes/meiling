@@ -22,17 +22,7 @@ fn main() {
     let create = matches.value_of("create").unwrap_or("no_value");
     if create != "no_value" {
         let note_name = matches.value_of("create").unwrap();
-        println!("Note: {}", note_name);
-
-        let vim = "/usr/bin/vim";
-        let note_file_path = format!("{}{}", &DEFAULT_REPOSITORY_PATH, note_name);
-        match Command::new(vim).arg(&note_file_path).status() {
-            Ok(_) => Ok(()),
-            Err(e) => {
-                eprintln!("Error: Unable to open file [{}] with vim [{}]: {}", vim, &note_file_path, e);
-                Err(e)
-            }
-        };
+        open_note_editor(note_name);
     }
 
     if let Some(_) = matches.subcommand_matches("push") {
@@ -48,6 +38,18 @@ fn main() {
     }
 }
 
+fn open_note_editor(note_name: &str) {
+    let vim = "/usr/bin/vim";
+    let note_file_path = format!("{}{}", &DEFAULT_REPOSITORY_PATH, note_name);
+    match Command::new(vim).arg(&note_file_path).status() {
+        Ok(_) => Ok(()),
+        Err(e) => {
+            eprintln!("Error: Unable to open file [{}] with vim [{}]: {}", vim, &note_file_path, e);
+            Err(e)
+        }
+    };
+}
+
 #[shell]
 fn git_pull(dir: &str) -> Result<impl Iterator<Item=String>, Box<Error>> { r#"
     cd $DIR
@@ -61,7 +63,6 @@ fn git_add_and_push(dir: &str) -> Result<impl Iterator<Item=String>, Box<Error>>
     git commit -m 'Commit message'
     git push
 "# }
-
 
 fn get_repository(repository_url: &str) -> git2::Repository {
     return match Repository::open(&DEFAULT_REPOSITORY_PATH) {
