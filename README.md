@@ -1,6 +1,6 @@
 # Mei Ling
 
-CLI tool to store ideas asnotes (Markdown) that uses a Git repository as storage backend.
+CLI tool to store ideas as notes (Markdown) that uses a Git repository as storage backend.
 
 You need to setup a Git repo (e.g. GitHub) and pass the address on the config file.
 
