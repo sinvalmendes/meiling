@@ -1,4 +1,7 @@
-#![feature(try_from)]
+#[cfg(test)]
+mod tests;
+
+#[feature(try_from)]
 extern crate config;
 extern crate clap;
 
