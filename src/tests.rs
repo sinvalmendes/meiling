@@ -2,6 +2,7 @@
 mod tests {
     use crate::main;
     use crate::get_settings;
+    use crate::get_repository_url;
 
     #[test]
     fn test_get_settings() {
@@ -12,6 +13,13 @@ mod tests {
             None => panic!()
         };
         assert_eq!("https://github.com/sinvalmendes/notes", result);
+    }
+
+    #[test]
+    fn test_get_repository_url() {
+        let url = get_repository_url();
+        println!("{:?}", url);
+        assert_eq!("https://github.com/sinvalmendes/notes", url);
     }
 
 }
