@@ -3,6 +3,7 @@ mod tests {
     use crate::main;
     use crate::get_settings;
     use crate::get_repository_url;
+    use crate::open_note_editor;
 
     #[test]
     fn test_get_settings() {
@@ -20,6 +21,11 @@ mod tests {
         let url = get_repository_url();
         println!("{:?}", url);
         assert_eq!("https://github.com/sinvalmendes/notes", url);
+    }
+
+    #[test]
+    fn test_open_note_editor() {
+        open_note_editor("file");
     }
 
 }
