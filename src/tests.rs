@@ -7,13 +7,12 @@ mod tests {
 
     #[test]
     fn test_get_settings() {
-        let settings = get_settings();
+        let settings = get_settings(".Meiling.toml");
         println!("{:?}", settings);
         let result = match settings.get("repository") {
             Some(x) => x,
             None => panic!()
         };
-        assert_eq!("https://github.com/sinvalmendes/notes", result);
     }
 
     #[test]

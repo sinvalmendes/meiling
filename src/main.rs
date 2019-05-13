@@ -94,7 +94,7 @@ fn get_repository(repository_url: &str, repository_path: &str) -> git2::Reposito
 }
 
 fn get_repository_url() -> std::string::String {
-    let settings = get_settings();
+    let settings = get_settings(&DEFAULT_CONFIG_FILE_PATH);
 
     match settings.get("repository") {
         Some(x) => format!("{}", x),
@@ -102,10 +102,10 @@ fn get_repository_url() -> std::string::String {
     }
 }
 
-fn get_settings() -> HashMap<String, String> {
+fn get_settings(confile_file_path: &str) -> HashMap<String, String> {
     let mut settings = config::Config::default();
     settings
-        .merge(config::File::with_name(&DEFAULT_CONFIG_FILE_PATH)).unwrap()
+        .merge(config::File::with_name(&confile_file_path)).unwrap()
         .merge(config::Environment::with_prefix("APP")).unwrap();
 
     settings.try_into::<HashMap<String, String>>().unwrap()
