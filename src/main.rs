@@ -18,7 +18,7 @@ static DEFAULT_REPOSITORY_PATH: &str = "repositories/fixed/";
 
 
 fn main() {
-    let repository_url = get_repository_url();
+    let repository_url = get_repository_url(&DEFAULT_CONFIG_FILE_PATH);
     get_repository(&repository_url, &DEFAULT_REPOSITORY_PATH);
     let matches = get_matches();
 
@@ -93,8 +93,8 @@ fn get_repository(repository_url: &str, repository_path: &str) -> git2::Reposito
     };
 }
 
-fn get_repository_url() -> std::string::String {
-    let settings = get_settings(&DEFAULT_CONFIG_FILE_PATH);
+fn get_repository_url(config_file_path: &str) -> std::string::String {
+    let settings = get_settings(&config_file_path);
 
     match settings.get("repository") {
         Some(x) => format!("{}", x),
