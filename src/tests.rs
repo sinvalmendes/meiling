@@ -4,10 +4,22 @@ mod tests {
     use crate::get_settings;
     use crate::get_repository_url;
     use crate::open_note_editor;
+    use std::io::prelude::*;
+    use std::fs::File;
 
     #[test]
     fn test_get_settings() {
-        let settings = get_settings(".Meiling.toml");
+        let file_name = ".Meiling.test.toml";
+        let mut file = File::create(&file_name);
+        match file {
+            Ok(mut x) => {
+                x.write(b"repository = \"https://github.com/sinvalmendes/notes\"");
+            },
+            Err(e) => {
+                panic!();
+            }
+        }
+        let settings = get_settings(&file_name);
         println!("{:?}", settings);
         let result = match settings.get("repository") {
             Some(x) => x,
