@@ -1,11 +1,11 @@
 #[cfg(test)]
 mod tests {
-    use crate::main;
-    use crate::get_settings;
     use crate::get_repository_url;
+    use crate::get_settings;
+    use crate::main;
     use crate::open_note_editor;
-    use std::io::prelude::*;
     use std::fs::File;
+    use std::io::prelude::*;
 
     #[test]
     fn test_get_settings() {
@@ -14,9 +14,9 @@ mod tests {
         create_test_config_file(file_content, file_name);
         let settings = get_settings(&file_name);
         println!("{:?}", settings);
-        let result = match settings.get("repository") {
+        match settings.get("repository") {
             Some(x) => x,
-            None => panic!()
+            None => panic!(),
         };
     }
 
@@ -38,12 +38,8 @@ mod tests {
     fn create_test_config_file(file_content: &str, file_name: &str) {
         let mut file = File::create(&file_name);
         match file {
-            Ok(mut x) => {
-                x.write(file_content.as_bytes());
-            },
-            Err(e) => {
-                panic!();
-            }
-        }
+            Ok(mut x) => x.write(file_content.as_bytes()),
+            Err(e) => panic!(),
+        };
     }
 }
