@@ -2,4 +2,4 @@ target/
 .DS_Store
 repositories/
 meiling
-*.test.toml
+*.test.*

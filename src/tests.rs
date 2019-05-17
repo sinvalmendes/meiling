@@ -2,8 +2,9 @@
 mod tests {
     use crate::get_repository_url;
     use crate::get_settings;
-    use crate::main;
-    use crate::open_note_editor;
+    use crate::get_repository;
+    use std::panic;
+    use git2::RepositoryState;
     use std::fs::File;
     use std::io::prelude::*;
 
@@ -25,14 +26,43 @@ mod tests {
         let file_name = ".Meiling.test.toml";
         let file_content = "repository = \"https://github.com/sinvalmendes/notes\"";
         create_test_config_file(file_content, file_name);
-        let url = get_repository_url(&file_name);
-        println!("{:?}", url);
-        assert_eq!("https://github.com/sinvalmendes/notes", url);
+        let repository_url = get_repository_url(&file_name);
+        println!("{:?}", repository_url);
+        assert_eq!("https://github.com/sinvalmendes/notes", repository_url);
     }
 
     #[test]
-    fn test_open_note_editor() {
-        open_note_editor("file");
+    fn test_get_repository() {
+        let file_name = ".test_get_repository.test.toml";
+        let file_content = "repository = \"https://github.com/sinvalmendes/notes\"";
+        create_test_config_file(file_content, file_name);
+        let repository_url = get_repository_url(&file_name);
+        assert_eq!("https://github.com/sinvalmendes/notes", repository_url);
+        let repository = get_repository(&repository_url, ".test.repositories/test01/");
+        assert_eq!(Ok(false), repository.is_empty());
+        assert_eq!(RepositoryState::Clean, repository.state());
+    }
+
+
+    #[test]
+    fn test_get_non_existent_repository() {
+        let file_name = ".test_get_non_existent_repository.test.toml";
+        let file_content = "repository = \"https://dontexist1234567890.com/sinvalmendes/notes\"";
+        create_test_config_file(file_content, file_name);
+        let repository_url = get_repository_url(&file_name);
+
+        panic::set_hook(Box::new(|_info| {
+            // do nothing, this is just to set the hook for panic::catch_unwind
+        }));
+
+        let result = panic::catch_unwind(|| {
+            get_repository(&repository_url, ".test.repositories/test02/");
+        });
+
+        match result {
+            Ok(res) => panic!("the get_repository should have panicked!"),
+            Err(_) => (),
+        }
     }
 
     fn create_test_config_file(file_content: &str, file_name: &str) {
