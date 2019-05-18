@@ -17,6 +17,9 @@ You need to setup a Git repo (e.g. GitHub) and pass the address on the config fi
   - 0.1.0 - reads a command line argument and open a file with vim - DONE
   - 0.1.1 - reads a command line argument and gives the status of the repository (just like git status) - DONE
   - 0.1.2 - reads a command line argument, adds all the current changes and pushes to the repository - DONE
+  - 0.1.3 - reads a command line argument and pull the repository remote state - DONE
+
+}
 
 # Run
 ```sh
