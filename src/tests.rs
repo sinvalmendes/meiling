@@ -22,6 +22,24 @@ mod tests {
     }
 
     #[test]
+    fn test_get_settings_in_non_existent_file() {
+        let file_name = ".nonexistent";
+
+        panic::set_hook(Box::new(|_info| {
+            // do nothing, this is just to set the hook for panic::catch_unwind
+        }));
+
+        let result = panic::catch_unwind(|| {
+            get_settings(&file_name)
+        });
+
+        match result {
+            Ok(res) => panic!("the get_settings should have panicked!"),
+            Err(_) => (),
+        }
+    }
+
+    #[test]
     fn test_get_repository_url() {
         let file_name = ".Meiling.test.toml";
         let file_content = "repository = \"https://github.com/sinvalmendes/notes\"";
